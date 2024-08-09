@@ -81,11 +81,20 @@ export default function Home() {
       {chatStarted ? (
         <Box
           width="100%"
-          maxWidth="400px"
+          maxWidth="600px" // Adjusted width for desktop
+          height="80vh" // Adjusted height for desktop
           bgcolor="#ffffff" // White background color
           border="1px solid #ccc" // Light grey border
           borderRadius="4px" // Slightly rounded corners
           overflow="hidden"
+          display="flex"
+          flexDirection="column"
+          sx={{
+            '@media (max-width: 600px)': {
+              maxWidth: '100%', // Full width on mobile
+              height: '90vh', // Full height on mobile
+            },
+          }}
         >
           <Box
             display="flex"
@@ -99,12 +108,9 @@ export default function Home() {
               <Avatar sx={{ bgcolor: '#e0e0e0', color: '#000' }}>S</Avatar>
               <Box ml={2}>
                 <Typography variant="subtitle1" fontWeight="bold">PC Part Picker Support</Typography>
-                <Typography variant="body2" color="textSecondary"> shainelomenario@gmail.com </Typography>
+                <Typography variant="body2" color="textSecondary">shainelomenario@gmail.com</Typography>
               </Box>
             </Box>
-            <IconButton>
-              <SendIcon sx={{ color: '#000' }} />
-            </IconButton>
           </Box>
           <Stack 
             direction="column" 
@@ -112,7 +118,6 @@ export default function Home() {
             p={2}
             flexGrow={1} 
             overflow="auto" 
-            maxHeight="400px"
             sx={{
               '&::-webkit-scrollbar': {
                 width: '8px',
@@ -148,7 +153,7 @@ export default function Home() {
             ))}
           </Stack>
           <Box p={1} borderTop="1px solid #ccc" bgcolor="#f5f5f5">
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
               <TextField
                 placeholder="Type your message..."
                 variant="outlined"
@@ -171,6 +176,7 @@ export default function Home() {
                 sx={{
                   backgroundColor: '#d3d3d3', // Match button to darker grey
                   borderRadius: '4px',
+                  ml: 1, // Add margin to the left of the button
                   '&:hover': {
                     backgroundColor: '#c0c0c0', // Slightly darker on hover
                   },
@@ -184,12 +190,17 @@ export default function Home() {
       ) : (
         <Box
           width="100%"
-          maxWidth="400px"
+          maxWidth="600px" // Adjusted width for desktop
           bgcolor="#D4D0C8" // Windows 98 window background color
           border="1px solid #ccc" // Light grey border for window edges
           borderRadius="4px" // Slightly rounded corners
           p={3}
           textAlign="center"
+          sx={{
+            '@media (max-width: 600px)': {
+              maxWidth: '100%', // Full width on mobile
+            },
+          }}
         >
           <Typography variant="h4" fontWeight="bold" color="#000000" gutterBottom>
             Welcome to PC Part Picker Support
