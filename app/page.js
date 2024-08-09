@@ -7,12 +7,19 @@ import SendIcon from '@mui/icons-material/Send';
 export default function Home() {
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    content: `Hello! I'm your friendly customer support assistant for PC Part Picker. How can I help you today?`
+    content: `Hello! I'm your customer support assistant for PC Part Picker. How can I help you today?`
   }]);
 
   const [message, setMessage] = useState('');
+  const [chatStarted, setChatStarted] = useState(false);
+
+  const startChat = () => {
+    setChatStarted(true);
+  };
 
   const sendMessage = async () => {
+    if (message.trim() === "") return; // Prevent sending empty messages
+
     const userMessage = message;
     setMessage('');
     setMessages((messages) => [
@@ -53,6 +60,13 @@ export default function Home() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents the default new line behavior in TextField
+      sendMessage();
+    }
+  };
+
   return (
     <Box 
       width="100vw" 
@@ -64,104 +78,141 @@ export default function Home() {
       bgcolor="#e0e0e0" // Light grey background color
       p={2}
     >
-      <Box
-        width="100%"
-        maxWidth="400px"
-        bgcolor="#ffffff" // White background color
-        border="1px solid #ccc" // Light grey border
-        borderRadius="4px" // Slightly rounded corners
-        overflow="hidden"
-      >
+      {chatStarted ? (
         <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          p={2}
-          bgcolor="#f5f5f5" // Slightly darker grey for the header
-          borderBottom="1px solid #ccc" // Border between header and body
+          width="100%"
+          maxWidth="400px"
+          bgcolor="#ffffff" // White background color
+          border="1px solid #ccc" // Light grey border
+          borderRadius="4px" // Slightly rounded corners
+          overflow="hidden"
         >
-          <Box display="flex" alignItems="center">
-            <Avatar sx={{ bgcolor: '#f5f5f5', color: '#000' }}> S </Avatar>
-            <Box ml={2}>
-              <Typography variant="subtitle1" fontWeight="bold"> PC Part Picker Support</Typography>
-              <Typography variant="body2" color="textSecondary"> shainelomenario@gmail.com </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Stack 
-          direction="column" 
-          spacing={2} 
-          p={2}
-          flexGrow={1} 
-          overflow="auto" 
-          maxHeight="400px"
-          sx={{
-            '&::-webkit-scrollbar': {
-              width: '8px',
-              backgroundColor: '#e0e0e0', // Match scrollbar background to page
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#ccc', // Match scrollbar thumb to border
-              borderRadius: '4px', // Slightly rounded scrollbar thumb
-            },
-          }}
-        >
-          {messages.map((message, index) => (
-            <Box 
-              key={index} 
-              display="flex" 
-              justifyContent={
-                message.role === 'assistant' ? 'flex-start' : 'flex-end'
-              }
-            >
-              <Box
-                bgcolor={message.role === 'assistant' ? '#f5f5f5' : '#d3d3d3'} // Light grey for assistant, slightly darker for user
-                color="black"
-                borderRadius="4px" // Slightly rounded message bubbles
-                p={2}
-                maxWidth="80%"
-                sx={{
-                  wordWrap: 'break-word',
-                }}
-              >
-                {message.content}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            p={2}
+            bgcolor="#f5f5f5" // Slightly darker grey for the header
+            borderBottom="1px solid #ccc" // Border between header and body
+          >
+            <Box display="flex" alignItems="center">
+              <Avatar sx={{ bgcolor: '#e0e0e0', color: '#000' }}>S</Avatar>
+              <Box ml={2}>
+                <Typography variant="subtitle1" fontWeight="bold">PC Part Picker Support</Typography>
+                <Typography variant="body2" color="textSecondary"> shainelomenario@gmail.com </Typography>
               </Box>
             </Box>
-          ))}
-        </Stack>
-        <Box p={1} borderTop="1px solid #ccc" bgcolor="#f5f5f5">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <TextField
-              placeholder="Type your message..."
-              variant="outlined"
-              fullWidth
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '4px', // Slightly rounded input field
-                  backgroundColor: '#ffffff', // White background for input
-                },
-                '& input': {
-                  padding: '10px',
-                },
-              }}
-            />
-            <IconButton 
-              onClick={sendMessage}
-              sx={{
-                backgroundColor: '#d3d3d3', // Match button to darker grey
-                borderRadius: '4px',
-                '&:hover': {
-                  backgroundColor: '#c0c0c0', // Slightly darker on hover
-                },
-              }}
-            >
-              <SendIcon />
+            <IconButton>
+              <SendIcon sx={{ color: '#000' }} />
             </IconButton>
+          </Box>
+          <Stack 
+            direction="column" 
+            spacing={2} 
+            p={2}
+            flexGrow={1} 
+            overflow="auto" 
+            maxHeight="400px"
+            sx={{
+              '&::-webkit-scrollbar': {
+                width: '8px',
+                backgroundColor: '#e0e0e0', // Match scrollbar background to page
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc', // Match scrollbar thumb to border
+                borderRadius: '4px', // Slightly rounded scrollbar thumb
+              },
+            }}
+          >
+            {messages.map((message, index) => (
+              <Box 
+                key={index} 
+                display="flex" 
+                justifyContent={
+                  message.role === 'assistant' ? 'flex-start' : 'flex-end'
+                }
+              >
+                <Box
+                  bgcolor={message.role === 'assistant' ? '#f0f0f0' : '#d3d3d3'} // Light grey for assistant, slightly darker for user
+                  color="black"
+                  borderRadius="4px" // Slightly rounded message bubbles
+                  p={2}
+                  maxWidth="80%"
+                  sx={{
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {message.content}
+                </Box>
+              </Box>
+            ))}
           </Stack>
+          <Box p={1} borderTop="1px solid #ccc" bgcolor="#f5f5f5">
+            <Stack direction="row" spacing={1} alignItems="center">
+              <TextField
+                placeholder="Type your message..."
+                variant="outlined"
+                fullWidth
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyDown} // Handle key down event
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '4px', // Slightly rounded input field
+                    backgroundColor: '#ffffff', // White background for input
+                  },
+                  '& input': {
+                    padding: '10px',
+                  },
+                }}
+              />
+              <IconButton 
+                onClick={sendMessage}
+                sx={{
+                  backgroundColor: '#d3d3d3', // Match button to darker grey
+                  borderRadius: '4px',
+                  '&:hover': {
+                    backgroundColor: '#c0c0c0', // Slightly darker on hover
+                  },
+                }}
+              >
+                <SendIcon />
+              </IconButton>
+            </Stack>
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box
+          width="100%"
+          maxWidth="400px"
+          bgcolor="#D4D0C8" // Windows 98 window background color
+          border="1px solid #ccc" // Light grey border for window edges
+          borderRadius="4px" // Slightly rounded corners
+          p={3}
+          textAlign="center"
+        >
+          <Typography variant="h4" fontWeight="bold" color="#000000" gutterBottom>
+            Welcome to PC Part Picker Support
+          </Typography>
+          <Button 
+            variant="contained" 
+            onClick={startChat}
+            sx={{
+              backgroundColor: '#c0c0c0', // Light grey button
+              color: '#000000', // Black text on the button
+              padding: '10px 20px',
+              border: '1px solid #808080', // Border around the button
+              boxShadow: 'none', // Remove box-shadow
+              borderRadius: '4px', // Slightly rounded edges
+              '&:hover': {
+                backgroundColor: '#a9a9a9', // Darker grey on hover
+              },
+            }}
+          >
+            Start Chatting
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }
